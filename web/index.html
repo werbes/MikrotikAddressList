@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generate MikroTik firewall address lists from IP2Location country ranges.">
+  <title>MikroTik Country Address List Builder</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="page-width masthead-inner">
+      <div>
+        <p class="eyebrow">RouterOS tooling</p>
+        <h1>Country address lists,<br>ready for MikroTik.</h1>
+        <p class="lede">Choose countries, name your address list, and download a complete RouterOS script with an IPv4 CIDR entry and country comment for every range.</p>
+      </div>
+      <section class="database-card" aria-live="polite" aria-label="Database status">
+        <div class="database-heading">
+          <span class="status-dot" id="status-dot" aria-hidden="true"></span>
+          <span id="status-title">Checking database</span>
+        </div>
+        <p id="status-message">Reading the local IP2Location database.</p>
+        <div class="database-meta" id="database-meta"></div>
+      </section>
+    </div>
+  </header>
+
+  <main class="page-width">
+    <form class="builder-panel" id="builder-form" novalidate>
+      <section class="list-settings" aria-labelledby="settings-heading">
+        <div>
+          <p class="step-label">01 / List details</p>
+          <h2 id="settings-heading">Name the target list</h2>
+          <p class="section-copy">The generated script replaces this list's existing entries by default.</p>
+        </div>
+        <div class="settings-fields">
+          <label class="field-label" for="list-name">MikroTik address-list name</label>
+          <input
+            id="list-name"
+            name="name"
+            type="text"
+            maxlength="64"
+            pattern="[A-Za-z0-9][A-Za-z0-9_.-]{0,63}"
+            placeholder="countries-blocked"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          >
+          <p class="field-help">Letters, numbers, dots, underscores, and hyphens. 1–64 characters.</p>
+          <label class="check-row" for="replace-existing">
+            <input id="replace-existing" name="replace" type="checkbox" checked>
+            <span>
+              <strong>Replace existing entries</strong>
+              <small>Remove current addresses from this list before adding the generated set.</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section class="country-section" aria-labelledby="countries-heading">
+        <div class="country-heading-row">
+          <div>
+            <p class="step-label">02 / Countries</p>
+            <h2 id="countries-heading">Choose the address sources</h2>
+          </div>
+          <div class="selection-summary">
+            <strong id="selection-count">0 countries</strong>
+            <span>selected</span>
+          </div>
+        </div>
+
+        <div class="country-toolbar">
+          <label class="search-box" for="country-search">
+            <span class="visually-hidden">Search countries</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6"></circle>
+              <path d="m16 16 4 4"></path>
+            </svg>
+            <input id="country-search" type="search" placeholder="Search name or country code" autocomplete="off">
+          </label>
+          <div class="toolbar-actions">
+            <button class="text-button" id="select-visible" type="button">Select visible</button>
+            <button class="text-button subtle" id="clear-selection" type="button">Clear</button>
+          </div>
+        </div>
+
+        <div class="country-grid" id="country-grid" aria-label="Available countries" hidden></div>
+        <p class="no-results" id="no-results" hidden>No countries match that search.</p>
+
+        <div class="build-bar">
+          <div>
+            <span class="build-label">Ready to build</span>
+            <span class="build-detail" id="build-detail">Select at least one country.</span>
+          </div>
+          <button class="primary-button" id="generate-button" type="submit" disabled>
+            <span>Generate RouterOS script</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3v12"></path>
+              <path d="m7 10 5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+          </button>
+        </div>
+        <p class="form-error" id="form-error" role="alert"></p>
+      </section>
+    </form>
+
+    <footer>
+      <p>This service uses the <a href="https://lite.ip2location.com" target="_blank" rel="noopener noreferrer">IP2Location LITE database</a> for IP geolocation.</p>
+      <p>IPv4 only · Database refreshes daily · Entries are emitted as minimal CIDR ranges.</p>
+    </footer>
+  </main>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

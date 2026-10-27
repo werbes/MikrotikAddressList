@@ -1,0 +1,17 @@
+# Local application state and the licensed IP2Location database
+/data/
+
+# IDE and local configuration
+/.idea/
+/.env
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+
+# Build and test output
+/*.exe
+/*.test
+/coverage.out
+/dist/
